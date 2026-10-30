@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>학생 패드용 · 기업의 역할 체험 마켓 (6-2 사회)</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1d3557;
+    --navy-dark: #0f172a;
+    --blue: #2563eb;
+    --teal: #0d9488;
+    --coral: #ea580c;
+    --gold: #d97706;
+    --bg-light: #f8fafc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Gowun Dodum', sans-serif;
+    background: var(--bg-light);
+    color: #1e293b;
+    padding: 14px;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  h1, h2, h3, h4, button, .jua { font-family: 'Jua', sans-serif; font-weight: normal; }
+
+  /* 상단 내 지갑 바 */
+  .my-wallet-bar {
+    background: var(--navy-dark);
+    color: #fff;
+    border-radius: 16px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+  }
+  .wallet-user {
+    font-size: 1.15rem;
+    font-family: 'Jua';
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wallet-coins {
+    font-family: 'Jua';
+    font-size: 1.45rem;
+    color: #fcd34d;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 14px;
+    border-radius: 999px;
+  }
+
+  /* 단계 카드 컨테이너 */
+  .step-screen {
+    background: #fff;
+    border: 2.5px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 20px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .step-screen-title {
+    font-family: 'Jua';
+    font-size: 1.55rem;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+
+  /* 기업 선택 그리드 */
+  .comp-select-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .comp-btn {
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px 10px;
+    font-family: 'Jua';
+    font-size: 1.15rem;
+    color: #1e293b;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .comp-btn:hover, .comp-btn.selected {
+    background: #eff6ff;
+    border-color: var(--blue);
+    color: var(--blue);
+    transform: scale(1.02);
+  }
+
+  /* 액션 버튼 */
+  .action-btn {
+    width: 100%;
+    background: var(--blue);
+    color: #fff;
+    border: 0;
+    font-family: 'Jua';
+    font-size: 1.35rem;
+    padding: 14px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    transition: transform 0.1s, background 0.2s;
+  }
+  .action-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+  .action-btn.green { background: #10b981; }
+  .action-btn.green:hover { background: #059669; }
+  .action-btn.orange { background: #ea580c; }
+  .action-btn.orange:hover { background: #c2410c; }
+
+  /* 취업 축하 화면 */
+  .celebrate-card {
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+    border: 3px solid #f59e0b;
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    margin: 10px 0;
+  }
+  .celebrate-coin {
+    font-size: 50pt;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  /* 입력 폼 */
+  .input-label {
+    font-family: 'Jua';
+    font-size: 1.15rem;
+    color: #475569;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .text-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1.1rem;
+    font-family: 'Gowun Dodum';
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  .text-input:focus { border-color: var(--blue); }
+
+  /* 쇼핑 결제 버튼 그룹 */
+  .pay-btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  /* 신제품 런칭 쇼케이스 포스터 카드 */
+  .launch-poster-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 3.5px solid var(--navy);
+    border-radius: 20px;
+    padding: 18px 16px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+  .poster-badge-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .poster-comp-tag {
+    font-family: 'Jua';
+    font-size: 1.1rem;
+    color: #fff;
+    background: var(--navy);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+  .poster-strat-tag {
+    font-family: 'Jua';
+    font-size: 0.95rem;
+    color: #b45309;
+    background: #fef3c7;
+    border: 1.5px solid #f59e0b;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .poster-product-avatar {
+    width: 95px;
+    height: 95px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 50%;
+    border: 3px solid var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 46pt;
+    margin: 4px 0 10px 0;
+    box-shadow: 0 6px 16px rgba(37,99,235,0.2);
+    animation: bounce 2s infinite;
+  }
+  .poster-product-name {
+    font-family: 'Jua';
+    font-size: 1.55rem;
+    color: var(--navy-dark);
+    margin-bottom: 8px;
+    line-height: 1.25;
+    word-break: keep-all;
+  }
+  .poster-slogan-box {
+    background: #f1f5f9;
+    border-left: 4.5px solid var(--teal);
+    border-radius: 0 12px 12px 0;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #1e293b;
+    margin: 6px 0;
+    width: 100%;
+    word-break: keep-all;
+  }
+  .poster-bottom-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1.5px dashed #cbd5e1;
+    font-family: 'Jua';
+    font-size: 1.05rem;
+    color: #64748b;
+  }
+  .poster-price-badge {
+    color: #b45309;
+    background: #fef3c7;
+    padding: 3px 12px;
+    border-radius: 8px;
+    font-size: 1.15rem;
+  }
+
+  /* 다시 선택 리셋 버튼 */
+  .reset-btn {
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    font-family: 'Jua';
+    font-size: 0.95rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .reset-btn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    transform: scale(1.04);
+  }
+
+  .screen-footer-reset {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .text-reset-link {
+    background: transparent;
+    border: 0;
+    color: #64748b;
+    font-family: 'Jua';
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .text-reset-link:hover { color: #dc2626; }
+
+  /* 토스트 */
+  #pad-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-family: 'Jua';
+    font-size: 1.05rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 9999;
+    white-space: nowrap;
+  }
+  #pad-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- 상단 내 지갑 및 회사 정보 바 -->
+<div class="my-wallet-bar">
+  <div class="wallet-user">
+    <span>👤</span>
+    <span id="disp-user-name">학생</span>
+    <span id="disp-my-comp" style="color:#93c5fd;font-size:0.95rem;">(소속 없음)</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="wallet-coins">
+      <span id="disp-my-coins">0</span> 🪙
+    </div>
+    <button class="reset-btn" onclick="resetMyChoices()" title="처음으로 돌아가서 회사를 다시 선택합니다">↺ 다시 선택</button>
+  </div>
+</div>
+
+<!-- =========================================================
+     [화면 1] 내 정보 입력 & 취업할 회사 선택
+     ========================================================= -->
+<div class="step-screen" id="screen-job">
+  <div>
+    <div class="step-screen-title">🏢 1단계: 취업할 기업을 선택하세요!</div>
+    
+    <div style="background:#eff6ff;border:2px solid #93c5fd;border-radius:12px;padding:10px 14px;font-size:1.05rem;color:#1e40af;margin-bottom:12px;">
+      🏃‍♂️ <b>취업 규칙:</b> 원하는 모둠 부스로 이동해 사장님과 면접을 보고 의자에 앉으세요! (각 회사당 <b>최대 4명 선착순 마감</b>)
+    </div>
+
+    <label class="input-label">내 이름(또는 번호):</label>
+    <input type="text" id="input-name" class="text-input" placeholder="예: 김사회 (1번)" value="학생">
+
+    <label class="input-label">내가 취업한 기업 선택:</label>
+    <div class="comp-select-grid">
+      <button class="comp-btn" onclick="selectCompany(1)">🚗 1. 미래 자동차<br><span style="font-size:0.95rem;color:#2563eb;">(정원 4명 선착순)</span></button>
+      <button class="comp-btn" onclick="selectCompany(2)">🍔 2. 미래 건강푸드<br><span style="font-size:0.95rem;color:#2563eb;">(정원 4명 선착순)</span></button>
+      <button class="comp-btn" onclick="selectCompany(3)">📱 3. 스마트 AI기기<br><span style="font-size:0.95rem;color:#2563eb;">(정원 4명 선착순)</span></button>
+      <button class="comp-btn" onclick="selectCompany(4)">👕 4. 친환경 패션<br><span style="font-size:0.95rem;color:#2563eb;">(정원 4명 선착순)</span></button>
+      <button class="comp-btn" onclick="selectCompany(5)">🎮 5. 메타버스 게임<br><span style="font-size:0.95rem;color:#2563eb;">(정원 4명 선착순)</span></button>
+      <button class="comp-btn" onclick="selectCompany(6)">💊 6. 스마트 헬스케어<br><span style="font-size:0.95rem;color:#2563eb;">(정원 4명 선착순)</span></button>
+    </div>
+  </div>
+
+  <button class="action-btn" onclick="submitJobApplication()">
+    💼 이 회사에 취업하기 & 첫 월급 받기!
+  </button>
+</div>
+
+<!-- =========================================================
+     [화면 2] 취업 축하 & 첫 월급 300만 원 수령 화면
+     ========================================================= -->
+<div class="step-screen" id="screen-wage" style="display:none;">
+  <div class="step-screen-title">🎉 취업 축하 & 첫 월급 수령 완료!</div>
+  
+  <div class="celebrate-card">
+    <div class="celebrate-coin">🪙🪙🪙</div>
+    <h2 style="font-size:1.8rem;color:#b45309;margin-bottom:6px;">첫 월급 300만 원 입금!</h2>
+    <p style="font-size:1.15rem;color:#78350f;">
+      축하합니다! <b id="wage-comp-name" style="color:var(--navy);">[기업]</b>의 직원이 되었습니다.<br>
+      일한 대가로 <b>코인 3개(300만 원)</b>를 지급받았습니다.
+    </p>
+  </div>
+
+  <div style="background:#f1f5f9;border-left:5px solid var(--blue);padding:12px;border-radius:8px;font-size:1rem;color:#334155;margin-bottom:14px;">
+    💡 <b>배움 콕:</b> "기업이 있어서 일자리를 얻고 월급(소득)을 받아 생활할 수 있어요!"
+  </div>
+
+  <button class="action-btn green" onclick="goScreen('screen-innovate')">
+    🚀 2단계: 우리 회사 신제품 혁신 회의 참여하기 ▶
+  </button>
+</div>
+
+<!-- =========================================================
+     [화면 3] 2단계: 우리 회사 혁신 제품 선택
+     ========================================================= -->
+<div class="step-screen" id="screen-innovate" style="display:none;">
+  <div>
+    <div class="step-screen-title">🚀 2단계: 더 많은 이윤을 위한 혁신!</div>
+    <p style="font-size:1.05rem;color:#475569;margin-bottom:12px;">
+      경쟁에서 이겨 더 많은 이윤을 얻기 위해 우리 회사는 어떤 노력을 할까요?
+    </p>
+
+    <div class="comp-select-grid" style="grid-template-columns:1fr;gap:8px;">
+      <button class="comp-btn" id="btn-inn-1" onclick="selectInnovation(1)" style="text-align:left;padding:12px 14px;">
+        🚀 <b>노력 ① 신기술 개발:</b> 최첨단 배터리·인공지능 연구
+      </button>
+      <button class="comp-btn" id="btn-inn-2" onclick="selectInnovation(2)" style="text-align:left;padding:12px 14px;">
+        🌿 <b>노력 ② 친환경 경영:</b> 100% 재활용 및 환경 보호
+      </button>
+      <button class="comp-btn" id="btn-inn-3" onclick="selectInnovation(3)" style="text-align:left;padding:12px 14px;">
+        ✨ <b>노력 ③ 품질·디자인 혁신:</b> 초경량 접이식 및 편리한 디자인
+      </button>
+    </div>
+
+    <label class="input-label" style="margin-top:10px;">우리 제품의 기발한 특징 (1줄 요약):</label>
+    <input type="text" id="input-feature" class="text-input" placeholder="예: 물에 뜨고 안 젖는 친환경 패딩!">
+  </div>
+
+  <button class="action-btn" style="background:#7c3aed;" onclick="generateProductPoster()">
+    ✨ 우리 회사 신제품 런칭 포스터 발행하기! ▶
+  </button>
+</div>
+
+<!-- =========================================================
+     [화면 3.5] 신제품 런칭 쇼케이스 포스터 카드 (부스 홍보용)
+     ========================================================= -->
+<div class="step-screen" id="screen-poster" style="display:none;">
+  <div>
+    <div class="step-screen-title">🌟 우리 회사 신제품 포스터 완성!</div>
+    
+    <div class="launch-poster-card" id="launch-poster-card">
+      <div class="poster-badge-top">
+        <span class="poster-comp-tag" id="poster-comp-name">🚗 미래 자동차</span>
+        <span class="poster-strat-tag" id="poster-strat-name">🚀 신기술 개발</span>
+      </div>
+
+      <div class="poster-product-avatar" id="poster-product-icon">🚗</div>
+      <h2 class="poster-product-name" id="poster-product-title">물에 뜨는 친환경 패딩</h2>
+
+      <div class="poster-slogan-box">
+        <div style="font-family:'Jua';font-size:0.95rem;color:var(--teal);margin-bottom:2px;">📢 공식 마케팅 홍보글:</div>
+        <div id="poster-slogan-text">"세상을 바꿀 최첨단 기술의 집약체! 지금 바로 경험하세요!"</div>
+      </div>
+
+      <div class="poster-bottom-details">
+        <span>👤 기획자: <b id="poster-creator-name" style="color:#0f172a;">김도영 사원</b></span>
+        <span class="poster-price-badge">🏷️ 1코인 (100만 원)</span>
+      </div>
+    </div>
+
+    <p style="font-size:0.95rem;color:#475569;text-align:center;margin:6px 0;">
+      💡 <b>부스 홍보 꿀팁:</b> 손님이 오면 이 화면을 보여주며 제품을 홍보하세요!
+    </p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+    <button class="action-btn orange" onclick="goScreen('screen-market')">
+      🛍️ 다른 회사 부스로 쇼핑하러 가기 (코인 결제) ▶
+    </button>
+    <button class="action-btn" style="background:#64748b;font-size:1.05rem;padding:10px;" onclick="goScreen('screen-innovate')">
+      ✏️ 포스터 내용 다시 수정하기
+    </button>
+  </div>
+</div>
+
+<!-- =========================================================
+     [화면 4] 3단계: 다른 회사 부스 방문 & 코인 결제(소비)
+     ========================================================= -->
+<div class="step-screen" id="screen-market" style="display:none;">
+  <div>
+    <div class="step-screen-title">🛍️ 3단계: 런칭 페어 쇼핑 & 코인 투자!</div>
+    
+    <button class="action-btn" style="background:#64748b;font-size:1rem;padding:8px 12px;margin-bottom:10px;" onclick="goScreen('screen-poster')">
+      📋 우리 회사 런칭 포스터 다시 보기
+    </button>
+
+    <p style="font-size:1.05rem;color:#475569;margin-bottom:10px;">
+      교실 부스를 돌아다니며 설명을 듣고, 가장 마음에 드는 혁신 기업에 월급 코인을 결제하세요!
+    </p>
+
+    <label class="input-label">내가 방문한 다른 기업 선택:</label>
+    <div class="comp-select-grid">
+      <button class="comp-btn" onclick="selectTargetCompany(1)">🚗 1. 미래 자동차</button>
+      <button class="comp-btn" onclick="selectTargetCompany(2)">🍔 2. 미래 건강푸드</button>
+      <button class="comp-btn" onclick="selectTargetCompany(3)">📱 3. 스마트 AI기기</button>
+      <button class="comp-btn" onclick="selectTargetCompany(4)">👕 4. 친환경 패션</button>
+      <button class="comp-btn" onclick="selectTargetCompany(5)">🎮 5. 메타버스 게임</button>
+      <button class="comp-btn" onclick="selectTargetCompany(6)">💊 6. 스마트 헬스케어</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="pay-btn-group">
+      <button class="action-btn green" onclick="payCoinsToCompany(1)">
+        🪙 1코인 (100만 원) 결제
+      </button>
+      <button class="action-btn orange" onclick="payCoinsToCompany(2)">
+        🪙🪙 2코인 (200만 원) 결제
+      </button>
+    </div>
+    <p style="font-size:0.95rem;color:#64748b;text-align:center;margin-top:8px;">
+      💡 코인을 결제하고 사장님께 상품을 구매하세요!
+    </p>
+  </div>
+</div>
+
+<div id="pad-toast">메시지</div>
+
+<script>
+let myCoins = 0;
+let myCompanyId = 0;
+let targetCompanyId = 0;
+const companyNames = [
+  "",
+  "미래 자동차 주식회사",
+  "미래 건강 푸드",
+  "스마트 AI 디바이스",
+  "친환경 에코 패션",
+  "K-콘텐츠 & 메타버스 게임",
+  "스마트 헬스케어"
+];
+
+const channel = window.BroadcastChannel ? new BroadcastChannel('school_market_sync') : null;
+
+function selectCompany(id){
+  myCompanyId = id;
+  document.querySelectorAll('#screen-job .comp-btn').forEach((b, idx) => {
+    b.classList.toggle('selected', idx + 1 === id);
+  });
+}
+
+function submitJobApplication(){
+  const name = document.getElementById('input-name').value.trim() || '학생';
+  if(!myCompanyId){
+    alert('취업하고 싶은 기업을 1곳 선택해 주세요!');
+    return;
+  }
+  myCoins = 3; // 첫 월급 300만원 = 코인 3개
+  document.getElementById('disp-user-name').textContent = name;
+  document.getElementById('disp-my-comp').textContent = `(${companyNames[myCompanyId]})`;
+  document.getElementById('disp-my-coins').textContent = myCoins;
+  document.getElementById('wage-comp-name').textContent = companyNames[myCompanyId];
+
+  goScreen('screen-wage');
+  showPadToast(`🎉 ${companyNames[myCompanyId]}에 취업 완료! 300만 원 입금!`);
+}
+
+let selectedInnovationId = 1;
+const companyIcons = ["", "🚗", "🍔", "📱", "👕", "🎮", "💊"];
+const innovationNames = ["", "🚀 신기술 개발", "🌿 친환경 경영", "✨ 품질·디자인 혁신"];
+
+const sloganTemplates = {
+  1: [
+    "\"세상을 바꿀 최첨단 신기술의 탄생! 남다른 기술력으로 미래를 가장 먼저 만나보세요!\"",
+    "\"수만 번의 연구와 도전 끝에 성공했습니다! 차원이 다른 혁신적인 성능을 경험하세요!\"",
+    "\"상상만 하던 미래 기술이 눈앞에! 우리 일상을 10배 더 편리하고 스마트하게 바꿉니다!\""
+  ],
+  2: [
+    "\"지구를 생각하는 가장 착한 선택! 100% 지속 가능한 에코 혁신을 응원해 주세요!\"",
+    "\"버려지는 자원에 새 생명을 불어넣었습니다! 환경을 지키며 즐기는 똑똑한 소비 라이프!\"",
+    "\"온실가스를 줄이고 미래를 지킵니다! 한 번의 구매로 지구를 지키는 히어로가 되어보세요!\""
+  ],
+  3: [
+    "\"눈길을 사로잡는 눈부신 디자인과 압도적 튼튼함! 한 번 쓰면 절대 다른 것으로 못 돌아갑니다!\"",
+    "\"초경량과 편리함을 동시에 잡은 명품 퀄리티! 매일매일 쓰고 싶은 최고의 실용성!\"",
+    "\"세상에 없던 완벽한 디자인과 품질! 나를 가장 빛나게 만들어 줄 올해 최고의 잇 아이템!\""
+  ]
+};
+
+function selectInnovation(id){
+  selectedInnovationId = id;
+  document.querySelectorAll('#screen-innovate .comp-btn').forEach((b, idx) => {
+    b.classList.toggle('selected', idx + 1 === id);
+  });
+  showPadToast('혁신 전략이 선택되었습니다!');
+}
+
+function generateProductPoster(){
+  const featInput = document.getElementById('input-feature').value.trim();
+  const defaultFeatures = {
+    1: "초고속 무선 충전 자율주행 전기차",
+    2: "식물성 대체육 웰빙 시그니처 버거",
+    3: "홀로그램 탑재 스마트 AI 디바이스",
+    4: "물에 뜨고 안 젖는 친환경 에코 패딩",
+    5: "오감 몰입형 미래 우주 메타버스 게임",
+    6: "바늘 없이 안 아픈 마이크로 헬스케어 밴드"
+  };
+  const productTitle = featInput || defaultFeatures[myCompanyId] || "미래 혁신 프리미엄 신제품";
+  const userName = document.getElementById('input-name').value.trim() || '학생 사원';
+
+  document.getElementById('poster-comp-name').textContent = companyNames[myCompanyId] || "우리 회사";
+  document.getElementById('poster-strat-name').textContent = innovationNames[selectedInnovationId] || "혁신 전략";
+  document.getElementById('poster-product-icon').textContent = companyIcons[myCompanyId] || "✨";
+  document.getElementById('poster-product-title').textContent = productTitle;
+  document.getElementById('poster-creator-name').textContent = userName;
+
+  const slogans = sloganTemplates[selectedInnovationId] || sloganTemplates[1];
+  const randSlogan = slogans[Math.floor(Math.random() * slogans.length)];
+  document.getElementById('poster-slogan-text').textContent = randSlogan;
+
+  goScreen('screen-poster');
+  showPadToast('✨ 우리 회사 신제품 런칭 포스터가 발행되었습니다!');
+}
+
+function selectTargetCompany(id){
+  if(id === myCompanyId){
+    alert('우리 회사에는 결제할 수 없습니다! 다른 모둠 회사를 방문해 주세요.');
+    return;
+  }
+  targetCompanyId = id;
+  document.querySelectorAll('#screen-market .comp-btn').forEach((b, idx) => {
+    b.classList.toggle('selected', idx + 1 === id);
+  });
+}
+
+function payCoinsToCompany(amount){
+  if(!targetCompanyId){
+    alert('방문한 기업을 먼저 선택해 주세요!');
+    return;
+  }
+  if(myCoins < amount){
+    alert(`코인이 부족합니다! (현재 남은 코인: ${myCoins}개)`);
+    return;
+  }
+
+  myCoins -= amount;
+  document.getElementById('disp-my-coins').textContent = myCoins;
+
+  // 고유 결제 트랜잭션 ID 발급 (중복 결제 카운트 방지)
+  const txId = 'tx_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+
+  // 전자칠판 화면으로 전송 (BroadcastChannel)
+  if(channel){
+    channel.postMessage({
+      type: 'add_coin',
+      groupNum: targetCompanyId,
+      amount: amount,
+      txId: txId
+    });
+  }
+
+  // 로컬스토리지 백업 전송 (동일 PC 다른 창 동기화 보장)
+  try{
+    const cur = JSON.parse(localStorage.getItem('lesson3_sales_data') || '[0,0,0,0,0,0]');
+    cur[targetCompanyId - 1] = (cur[targetCompanyId - 1] || 0) + amount;
+    localStorage.setItem('lesson3_sales_data', JSON.stringify(cur));
+    localStorage.setItem('lesson3_sales_sync', JSON.stringify({ groupNum: targetCompanyId, amount: amount, txId: txId, time: Date.now() }));
+  }catch(e){}
+
+  showPadToast(`🪙 [${companyNames[targetCompanyId]}]에 ${amount}코인 결제 성공!`);
+  if(myCoins === 0){
+    setTimeout(() => {
+      alert('월급 코인 3개를 모두 알뜰하게 소비했습니다! 멋진 소비자 활동이었습니다.👏');
+    }, 500);
+  }
+}
+
+function goScreen(screenId){
+  document.querySelectorAll('.step-screen').forEach(s => s.style.display = 'none');
+  const target = document.getElementById(screenId);
+  if(target) target.style.display = 'flex';
+}
+
+function resetMyChoices(){
+  if(!confirm('처음 화면으로 돌아가 회사를 다시 선택하시겠습니까? (이전 선택과 코인이 초기화됩니다)')) return;
+  myCoins = 0;
+  myCompanyId = 0;
+  targetCompanyId = 0;
+  document.getElementById('disp-user-name').textContent = '학생';
+  document.getElementById('disp-my-comp').textContent = '(소속 없음)';
+  document.getElementById('disp-my-coins').textContent = '0';
+  document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('selected'));
+  const feat = document.getElementById('input-feature');
+  if(feat) feat.value = '';
+  goScreen('screen-job');
+  showPadToast('처음 화면으로 초기화되었습니다! 회사를 다시 선택해 보세요.');
+}
+
+function showPadToast(msg){
+  const t = document.getElementById('pad-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showPadToast.timer);
+  showPadToast.timer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+</script>
+
+</body>
+</html>
