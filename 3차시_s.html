@@ -523,6 +523,22 @@ const companyNames = [
 
 const channel = window.BroadcastChannel ? new BroadcastChannel('school_market_sync') : null;
 
+// 🌐 인터넷 중계(ntfy.sh): 학생 패드 → 선생님 슬라이드 (다른 기기끼리 연결)
+// ※ 슬라이드 파일의 NTFY_TOPIC과 반드시 같아야 합니다.
+const NTFY_TOPIC = 'yongsu6-market-lesson3-k7q2x9';
+function sendPaymentOnline(payload, tryCount = 0){
+  fetch('https://ntfy.sh/' + NTFY_TOPIC, { method: 'POST', body: JSON.stringify(payload) })
+    .then(res => { if(!res.ok) throw new Error('HTTP ' + res.status); })
+    .catch(() => {
+      // 접속이 몰리거나 끊기면 잠시 후 다시 전송 (최대 6번)
+      if(tryCount < 6){
+        setTimeout(() => sendPaymentOnline(payload, tryCount + 1), 2000 + tryCount * 2000 + Math.random() * 2000);
+      }else{
+        showPadToast('⚠️ 전송 실패! 선생님께 결제 화면을 보여주세요.');
+      }
+    });
+}
+
 function selectCompany(id){
   myCompanyId = id;
   document.querySelectorAll('#screen-job .comp-btn').forEach((b, idx) => {
@@ -639,6 +655,9 @@ function payCoinsToCompany(amount){
       txId: txId
     });
   }
+
+  // 인터넷 중계 전송 (학생 패드 → 선생님 PC)
+  sendPaymentOnline({ type: 'add_coin', groupNum: targetCompanyId, amount: amount, txId: txId });
 
   // 로컬스토리지 백업 전송 (동일 PC 다른 창 동기화 보장)
   try{
